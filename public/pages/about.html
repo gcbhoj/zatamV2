@@ -1,0 +1,232 @@
+<section>
+    <div class="hero">
+        <h1>Welcome to Our Story ~ संस्कृतभारती</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Who We Are</h2>
+        <p>Our Mission: Reviving a language, rejuvenating a culture, rebuilding a nation that is Bharat!</p>
+        <p>Samskrit Bharati (founded 1981) is a movement for the continuing protection, development, and propagation of
+            the Sanskritam language as well as the literature, tradition, and the knowledge systems embedded in it.</p>
+
+        <h2>Our Values</h2>
+        <div class="values">
+            <div class="value">
+                <h3>📜 Tradition</h3>
+                <p>We honor and uphold the wisdom of our ancestors.</p>
+            </div>
+            <div class="value">
+                <h3>🏛 Preserving Language</h3>
+                <p>We are committed to keeping Sanskrit alive for future generations.</p>
+            </div>
+            <div class="value">
+                <h3>🌟 Preserving Cultural</h3>
+                <p> We strive to rejuvenate the cultural essence of Bharat by promoting Sanskrit literature, philosophy,
+                    and traditional practices.</p>
+            </div>
+        </div>
+
+        <!-- Call-to-Action Button -->
+        <a href="https://www.samskritabharati.in/" class="cta">Get in Touch</a>
+    </div>
+    <style>
+        h1,
+        h2,
+        .container h3 {
+            color: #222;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .container p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Hero Section */
+        .hero {
+            /* background: url('https://via.placeholder.com/1920x600') center/cover no-repeat; */
+            height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #161A2B, #F4F4F4);
+        }
+
+        .hero h1 {
+            position: relative;
+            z-index: 2;
+            font-size: 4rem;
+            animation: fadeIn 1.5s ease-in-out;
+
+            text-shadow: 2px 2px 8px #161A2B;
+        }
+
+        /* Container */
+        .container {
+            /* max-width: 1200px;
+            margin: 4rem auto;
+            /* margin: 2rem; */
+            /* padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px #161A2B;
+            text-align: center;  */
+
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 2rem 1rem;
+            /* 2rem top/bottom, 1rem left/right */
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px #161A2B;
+            text-align: center;
+            width: 90%;
+            /* Optional: ensures some breathing space on smaller screens */
+        }
+
+        /* Values Section */
+        .values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .value {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px #161A2B;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        .value:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .value h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #161A2B;
+        }
+
+        .value p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Call-to-Action Button */
+        .cta {
+            margin-top: 3rem;
+            padding: 1rem 2rem;
+            background: #161A2B;
+            color: white;
+            display: inline-block;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .cta:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.0rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            h3 {
+                font-size: 1.3rem;
+            }
+
+            .hero {
+                height: 40vh;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .value {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 30vh;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+
+            }
+
+            .container {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+
+</section>

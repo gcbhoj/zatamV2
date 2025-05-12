@@ -1,0 +1,188 @@
+<section id="featured-section">
+
+</section>
+<section id="filter-section">
+    <button data-filter="all">All</button>
+    <button data-filter="TA">TA</button>
+    <button data-filter="RG">RG</button>
+    <button data-filter="ET">ET</button>
+    <button data-filter="सम्भाषणसन्देशः">सम्भाषणसन्देशः</button>
+    <button data-filter="Telegram">Telegram</button>
+</section>
+<section id="grid-section">
+</section>
+<style>
+  button {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border: none;
+            border-radius: 4px;
+            background: #161A2B;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #343c66;
+        }
+
+        body.dark button {
+            background: #343c66;
+        }
+
+        body.dark button:hover {
+            background: #343c66;
+        }
+#featured-section {
+            display: flex;
+            overflow-x: auto;
+            overflow-y: visible !important;
+            padding: 1rem;
+            gap: 1rem;
+            scroll-behavior: smooth;
+            cursor: grab;
+
+            mask: linear-gradient(to left, transparent 0%, white 20%, white 80%, transparent 100%);
+            margin-top: 90px;
+        }
+
+        #featured-section .game-card {
+            position: absolute;
+            border-radius: 10pt;
+            width: 400px;
+            height: 400px;
+            padding: 25px;
+            object-fit: cover;
+            /* animation: slide-in 10s linear infinite; */
+            border: 1px inset transparent;
+            margin-bottom: 2vh;
+            text-align: center;
+        }
+
+
+        @keyframes slide-in {
+            from {
+                transform: translateX(-100vw);
+            }
+
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+
+        #featured-section .game-card:hover {
+            border: 1px inset black;
+            transform: scale(1.15);
+        }
+
+        #featured-section .game-card:active {
+            border: 1px inset white;
+        }
+
+
+
+        .game-card {
+            flex: 0 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            height: 250px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            color: white;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .game-card .game-card-content {
+            z-index: 2;
+            padding: 10px;
+        }
+
+        .game-card:hover {
+            transform: scale(1.15);
+        }
+
+        .game-card:active {
+            transform: scale(0.98);
+        }
+
+        #filter-section {
+            padding: 1rem;
+            text-align: center;
+        }
+
+        #grid-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem 1rem;
+            padding: 1rem;
+            justify-content: space-between;
+        }
+
+        #grid-section>* {
+            flex: 1 1 250px;
+        }
+        @media (max-width: 480px) {
+            .game-card {
+                /* width: 100%;
+        height: 220px; */
+                width: 100px;
+                height: 200px;
+                padding: 1rem;
+                margin-right:2rem;
+                margin-left: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            #featured-section .game-card {
+
+                width: 200px;
+                height: 200px;
+                padding: 25px;
+                object-fit: cover;
+                /* animation: slide-in 10s linear infinite; */
+                border: 1px inset transparent;
+                margin-top: 2vh;
+                margin-bottom: 2vh;
+                text-align: center;
+            }
+        }
+      
+</style>
+<script>
+  
+
+        // Auto-scroll for featured section
+     
+
+        // Drag-to-scroll for featured section
+        // let isDown = false, startX, scrollLeft;
+        // featuredContainer.addEventListener('mousedown', (e) => {
+        //   isDown = true;
+        //   featuredContainer.classList.add('active');
+        //   startX = e.pageX - featuredContainer.offsetLeft;
+        //   scrollLeft = featuredContainer.scrollLeft;
+        // });
+        // featuredContainer.addEventListener('mouseleave', () => {
+        //   isDown = false;
+        //   featuredContainer.classList.remove('active');
+        // });
+        // featuredContainer.addEventListener('mouseup', () => {
+        //   isDown = false;
+        //   featuredContainer.classList.remove('active');
+        // });
+        // featuredContainer.addEventListener('mousemove', (e) => {
+        //   if (!isDown) return;
+        //   e.preventDefault();
+        //   const x = e.pageX - featuredContainer.offsetLeft;
+        //   const walk = (x - startX) * 2;
+        //   featuredContainer.scrollLeft = scrollLeft - walk;
+        // });
+
+</script>

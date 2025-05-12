@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Body Styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #161A2B, #F4F4F4);
+            /* Red to Yellow gradient */
+            color: #fff;
+        }
+
+        /* Sign-Up Container */
+        .signup-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Heading */
+        .signup-container h2 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Input Fields */
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 0.75rem 0.75rem 40px;
+            /* Space for the icon */
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Buttons */
+        .signup-container button {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 5px;
+            background: #161A2B;
+            /* Orange-Red */
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .signup-container button:hover {
+            background: #41434a;
+            /* Darker Orange-Red */
+        }
+
+        .signup-container #back-to-login-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .signup-container #back-to-login-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 1.5rem;
+            }
+
+            .signup-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .input-group input,
+            .signup-container button {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <script type="module">
+        import { auth, createUserWithEmailAndPassword, createUserDocument } from '/script/firebase.js';
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle sign-up
+            document.getElementById("signup-btn").addEventListener("click", function () {
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // User successfully signed up
+                        const user = userCredential.user;
+
+                        // Create a user document in Firestore
+                        return createUserDocument(user);
+                    })
+                    .then(() => {
+                        alert("Sign-up successful! You can now log in.");
+                        window.location.href = "/index.html"; // Redirect to zat.am2 page
+                    })
+                    .catch((error) => {
+                        // Display user-friendly error messages
+                        switch (error.code) {
+                            case "auth/email-already-in-use":
+                                alert("This email is already in use.");
+                                break;
+                            case "auth/invalid-email":
+                                alert("Invalid email address.");
+                                break;
+                            case "auth/weak-password":
+                                alert("Password should be at least 6 characters.");
+                                break;
+                            default:
+                                alert("An error occurred. Please try again.");
+                        }
+                        console.error(error);
+                    });
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="email" placeholder="Email">
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="password" placeholder="Password">
+        </div>
+        <button id="signup-btn">Sign Up</button>
+        <button onclick="window.location.href='login.html'">Back to Login</button>
+    </div>
+</body>
+
+</html>

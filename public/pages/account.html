@@ -1,0 +1,152 @@
+<div class="container">
+
+    <div class="account-container">
+        <h1>Account Settings</h1>
+        <div class="input-group">
+            <label for="displayName">Display Name</label>
+            <input type="text" id="displayName" placeholder="Enter your display name">
+        </div>
+
+        <button id="save-btn">Save Changes</button>
+    </div>
+    <style>
+        .container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .account-container {
+            background: rgba(255, 255, 255, 0.1);
+            text-align: center;
+            margin-top: 70px;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 30px #161A2B;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+
+            max-width: 500px;
+
+        }
+
+
+        .account-container h1 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #161A2B;
+        }
+
+
+        .input-group {
+            margin: 1rem 0;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid black;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: 161A2B;
+            font-size: 1rem;
+        }
+
+        .input-group input::placeholder {
+            color: 161A2B;
+            border: 1px #161A2B;
+        }
+
+
+        .account-container button {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 1rem 0;
+            border: none;
+            border-radius: 5px;
+            background: #161A2B;
+
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .account-container button:hover {
+            background: #272d4c;
+            color: white;
+
+        }
+
+
+        @media (max-width: 480px) {
+            .account-container {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .input-group input,
+            .account-container button {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <script type="module">
+        import { auth, db, doc, getDoc, setDoc } from './script/firebase.js';
+
+        // Fetch and display user data
+        const fetchUserData = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const userRef = doc(db, "users", user.uid);
+                const userDoc = await getDoc(userRef);
+
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    document.getElementById("displayName").value = userData.displayName || "";
+                }
+            }
+        };
+
+        // Save user data
+        const saveUserData = async () => {
+            const user = auth.currentUser;
+            if (user) {
+                const displayName = document.getElementById("displayName").value;
+
+                if (displayName) {
+                    const userRef = doc(db, "users", user.uid);
+                    await setDoc(userRef, { displayName }, { merge: true });
+                    alert("Display name updated successfully!");
+                    window.location.href = "zatam2.html";
+                } else {
+                    alert("Please enter a display name.");
+                }
+            }
+        };
+
+        // Load user data when the page loads
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchUserData();
+        });
+
+        // Save changes when the button is clicked
+        document.getElementById("save-btn").addEventListener("click", saveUserData);
+    </script>
+
+</div>

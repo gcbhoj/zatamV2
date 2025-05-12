@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Body Styling */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #161A2B, #F4F4F4);
+            color: #fff;
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Heading */
+        .login-container h2 {
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Input Fields */
+        .login-container input {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .login-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Buttons */
+        .login-container button {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .login-container #login-btn {
+            background: #161A2B;
+        }
+
+        .login-container #login-btn:hover {
+            background: #41434a;
+        }
+
+        .login-container #google-login-btn {
+            background: white;
+            /* Google Blue */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            height: 45px;
+        }
+
+
+
+        .login-container #google-login-btn img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 10px;
+        }
+
+        .login-container #signup-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .login-container #signup-btn:hover {
+            background: #41434a;
+
+        }
+
+
+
+        .login-container #cancel-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .login-container #cancel-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.5rem;
+            }
+
+            .login-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .login-container input,
+            .login-container button {
+                padding: 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+    <script type="module">
+        import {
+            auth,
+            signInWithEmailAndPassword,
+            googleProvider,
+            signInWithPopup,
+            signInWithGoogle,
+        } from '/script/firebase.js';
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle email/password login
+            document.getElementById("login-btn").addEventListener("click", function () {
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        localStorage.setItem("user", JSON.stringify(user));
+                        alert("Login successful!");
+                        window.location.href = "/index.html"; // Redirect to home page
+                    })
+                    .catch((error) => {
+                        switch (error.code) {
+                            case "auth/invalid-email":
+                                alert("Invalid email address.");
+                                break;
+                            case "auth/user-not-found":
+                            case "auth/wrong-password":
+                                alert("Incorrect email or password.");
+                                break;
+                            default:
+                                alert("An error occurred. Please try again.");
+                        }
+                        console.error(error);
+                    });
+            });
+
+            // Handle Google login
+            document.getElementById("google-login-btn").addEventListener("click", async function () {
+                try {
+                    await signInWithGoogle(); // Use the imported signInWithGoogle function
+                    const user = auth.currentUser;
+                    localStorage.setItem("user", JSON.stringify(user));
+                    alert("Google login successful!");
+                    window.location.href = "/index.html"; // Redirect to home page
+                } catch (error) {
+                    alert("Google login failed: " + error.message);
+                    console.error(error);
+                }
+            });
+
+            // Redirect to sign-up page
+            document.getElementById("signup-btn").addEventListener("click", function () {
+                window.location.href = "signup.html";
+            });
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button id="login-btn">Login</button>
+
+        <button id="signup-btn">Sign Up</button>
+        <button id="google-login-btn">
+            <img src="/images/google-logo.jpeg" alt="Google Logo">
+            Login with Google
+        </button>
+    </div>
+</body>
+
+</html>

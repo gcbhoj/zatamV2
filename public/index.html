@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zat.am </title>
+    <style>
+        ::-webkit-scrollbar {
+            width: 0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Iosevka;
+            margin: 0;
+            padding: 0;
+            /* line-height: 1.5; */
+            /* background: #F8F9FA;
+      color: #333; */
+            background-color: #F4F4F4;
+            /* Dark Blue Grey */
+            /* color: #F4F4F4; */
+            /* Off-White */
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body.dark {
+            background: #121212;
+            color: #e0e0e0;
+        }
+
+        header {
+
+            display: flex;
+            justify-content: flex-end;
+
+            /* padding: 1rem; */
+        }
+
+        nav {
+            display: flex;
+            width: 100%;
+            height: 80px;
+            /* or whatever height you want */
+            min-height: 80px;
+            max-height: 80px;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #161A2B;
+            color: #F4F4F4;
+            padding: 15px 20px;
+            position: fixed;
+            z-index: 1000;
+        }
+
+        .logo {
+
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .logo .nav-link {
+            color: inherit;
+
+            text-decoration: none;
+
+        }
+
+        .logo .nav-link:visited,
+        .logo .nav-link:active,
+        .logo .nav-link:focus {
+            color: inherit;
+
+            text-decoration: none;
+
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            /* text-decoration: underline; */
+            color: skyblue;
+        }
+
+        /* Account Settings Dropdown (Desktop) */
+        .account-settings {
+            position: relative;
+        }
+
+        .account-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            min-width: 150px;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Hide Menu Toggle Button by Default */
+        #menu-toggle {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* Fullscreen Mobile Menu */
+        #menu-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #161A2B;
+            color: #F4F4F4;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 1000;
+            /* transition: 1s; */
+            transition: max-height 2s ease-in-out;
+        }
+
+        #menu-bar a,
+        #menu-bar button {
+            color: white;
+            font-size: 24px;
+            text-decoration: none;
+            margin: 15px 0;
+            display: block;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        #menu-bar a:hover {
+            text-decoration: underline;
+        }
+
+        #close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+
+        /* .content {
+
+            min-height: 80vh;
+        } */
+
+        #footer {
+            /* background: #ff3d00; */
+            background-color: #161A2B;
+            color: #F4F4F4;
+
+
+            padding: 2rem 1rem;
+            margin-top: 2rem;
+
+            text-align: center;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .footer-section {
+            flex: 1 1 250px;
+            min-width: 200px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin: 0.5rem 0;
+        }
+
+        .footer-section ul li a {
+            text-decoration: none;
+            color: #bbb;
+            transition: color 0.3s;
+        }
+
+
+
+        .footer-section ul li a:hover {
+            color: black;
+        }
+
+        .footer-section ul {
+            color: black;
+        }
+
+        .social-links a {
+            display: inline-block;
+            margin: 0 0.5rem;
+            color: #bbb;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: black;
+        }
+
+        .footer-bottom {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #444;
+        }
+
+        /* .menu-toggle {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+    } */
+
+        @media (max-width: 480px) {
+            body {
+                font-size: 1rem;
+            }
+
+            .nav-links,
+            .account-settings {
+                display: none;
+            }
+
+            #menu-bar a:hover {
+                text-decoration: none;
+                color: skyblue;
+            }
+
+            #menu-toggle {
+                display: block;
+            }
+
+
+
+            #footer {
+                padding: 1rem;
+            }
+
+            .footer-container {
+                gap: 1rem;
+            }
+
+            .footer-section {
+                min-width: 150px;
+            }
+
+            .social-links a {
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo"> <a href="#" class="nav-link" data-page="home">Zat.am </a></div>
+
+            <div class="nav-links">
+                <a href="#" class="nav-link" data-page="about">About</a>
+                <a href="#" class="nav-link" data-page="scoreboard">Scoreboard</a>
+                <a href="#">Contact</a>
+            </div>
+
+            <div class="account-settings">
+                <button class="account-btn" id="account-btn">⚙ Account</button>
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <a href="#" class="nav-link" data-page="account">Account Settings</a>
+                    <a id="auth-button">Logout</a>
+                </div>
+            </div>
+
+            <button id="menu-toggle">☰</button>
+        </nav>
+
+        <!-- Fullscreen Mobile Menu -->
+        <div id="menu-bar">
+            <button id="close-menu">✖</button>
+            <a href="#" class="nav-link" data-page="about">About</a>
+            <a href="#" class="nav-link" data-page="scoreboard">Scoreboard</a>
+            <a href="#">Contact</a>
+            <a href="#" class="nav-link" data-page="account">Account Settings</a> <!-- Directly in menu -->
+            <a id="auth-button">Logout</a> <!-- Directly in menu -->
+        </div>
+
+    </header>
+    <main id="content">
+
+    </main>
+
+    <footer id="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About Zat.am</h3>
+                <p>Discover Sanskrit Through Interactive Games!</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="about">About</a></li>
+                    <li><a href="#" class="nav-link" data-page="scoreboard">ScoreBoard</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#" class="nav-link" data-page="account">Account</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Zat.am | All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { app, analytics, auth, onAuthStateChanged, signOut } from './script/firebase.js';
+
+        // Wait for the DOM to load
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check user authentication state
+
+            onAuthStateChanged(auth, (user) => {
+                console.log("Auth state changed. User:", user);
+                // const user = localStorage.getItem("user");
+                if (!user) {
+                    // User is not logged in, redirect to login page
+                    console.log("No user found, redirecting to login page.");
+                    window.location.href = 'pages/login.html';
+                } else {
+                    // User is logged in, proceed with the page
+                    const authButton = document.getElementById('auth-button');
+
+                    if (!authButton) {
+                        console.error("Element with ID 'auth-button' not found!");
+                        return;
+                    }
+
+                    authButton.textContent = 'Logout';
+                    authButton.onclick = () => {
+                        signOut(auth).then(() => {
+                            alert('Logged out successfully!');
+                            // localStorage.removeItem("user");
+                            window.location.href = 'pages/login.html'; // Redirect to login page
+                        }).catch((error) => {
+                            alert('Error logging out: ' + error.message);
+                        });
+                    };
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load home page by default
+            loadPage('home');
+
+            // Handle navigation clicks
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('nav-link')) {
+                    e.preventDefault();
+                    const page = e.target.getAttribute('data-page');
+                    loadPage(page);
+                }
+            });
+        });
+
+        function loadPage(page) {
+            const contentDiv = document.getElementById('content');
+
+            fetch(`pages/${page}.html`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Page not found');
+                    return response.text();
+                })
+                .then(html => {
+                    contentDiv.innerHTML = html;
+                    history.pushState({ page }, '', `?page=${page}`);
+
+                    // Reinitialize scripts for the loaded page
+                    if (page === 'home') initHomePage();
+                })
+                .catch(error => {
+                    contentDiv.innerHTML = `
+                <section class="error">
+                    <h2>Error</h2>
+                    <p>${error.message}</p>
+                </section>
+            `;
+                    console.error(error);
+                });
+        }
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', function (e) {
+            if (e.state?.page) {
+                loadPage(e.state.page);
+            } else {
+                loadPage('home');
+            }
+        });
+
+        const menuToggle = document.getElementById('menu-toggle');
+        const menuBar = document.getElementById('menu-bar');
+        const closeMenu = document.getElementById('close-menu');
+
+        const accountBtn = document.getElementById('account-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        const menuLinks = menuBar.querySelectorAll('a');
+        // Toggle mobile menu
+        menuToggle.addEventListener('click', () => {
+            menuBar.style.display = "flex";
+        });
+        // Close mobile menu on link click (for small screens)
+        document.querySelectorAll('.menu-bar a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuBar.style.display = "none";
+            });
+        });
+
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuBar.style.display = "none";
+            });
+        });
+        closeMenu.addEventListener('click', () => {
+            menuBar.style.display = "none";
+        });
+
+        // Toggle desktop account dropdown
+        accountBtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent closing when clicking inside
+            dropdownMenu.style.display = dropdownMenu.style.display === "block" ? "none" : "block";
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!accountBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = "none";
+            }
+        });
+
+
+        function initHomePage() {
+            // Sample game data
+            const games = [
+                { id: 1, title: "श्रीमद् भगवद्गीता", category: "TA", featured: true, backgroundImage: "covers/image1.jpg" },
+                { id: 2, title: "शिलाखण्डः , पत्रम् , कर्तरी", category: "RG", featured: true, backgroundImage: "covers/image2.jpg" },
+                { id: 3, title: "सोपानसर्पाः च", category: "ET", featured: true, backgroundImage: "covers/image3.jpg" },
+                { id: 4, title: "सुडोकू", category: "RG", featured: true, backgroundImage: "covers/image4.jpg" },
+                { id: 5, title: "द्वन्द्वयुद्धम्", category: "RG", featured: true, backgroundImage: "covers/image5.jpg" },
+                { id: 6, title: "नाम किम्?", category: "TA", featured: false, backgroundImage: "covers/image6.jpg" },
+                { id: 7, title: "श्रीकृष्णस्य वा अर्जुनस्य", category: "TA", featured: false, backgroundImage: "covers/image7.jpg" },
+                { id: 8, title: "संस्कृतम् Minesweeper", category: "RG", featured: false, backgroundImage: "covers/image8.jpg" },
+                { id: 9, title: "Memory क्रीडा", category: "RG", featured: false, backgroundImage: "covers/image9.jpg" },
+                { id: 10, title: "राशयः", category: "RG", featured: false, backgroundImage: "covers/image10.jpg" },
+                { id: 11, title: "मासाः", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 12, title: "सूर्यनमस्कारः", category: "RG", featured: false },
+                { id: 13, title: "सङ्ख्या matching", category: "RG", featured: false },
+                { id: 14, title: "सङ्ख्या typer", category: "RG", featured: false },
+                { id: 15, title: "२०४८", category: "RG", featured: false },
+                { id: 16, title: "समस्या", category: "RG", featured: false },
+                { id: 17, title: "रचयतु", category: "RG", featured: false },
+                { id: 18, title: "Arrange सुभाषितम्", category: "RG", featured: false },
+                { id: 19, title: "चित्र-समस्या", category: "RG", featured: false },
+                { id: 20, title: "कथा game", category: "RG", featured: false },
+                { id: 21, title: "अन्वेषणम्", category: "RG", featured: false },
+                { id: 22, title: "पाशः", category: "RG", featured: false },
+                { id: 23, title: "सङ्क्षेपरामायणम्", category: "RG", featured: false },
+                { id: 24, title: "Arrange श्लोकः", category: "RG", featured: false },
+                { id: 25, title: "स्वराः-painting", category: "RG", featured: false },
+                { id: 26, title: "१५ समस्या", category: "RG", featured: false },
+                { id: 27, title: "Flash", category: "ET", featured: false },
+                { id: 28, title: "पदरञ्जिनी - padara~njinii", category: "सम्भाषणसन्देशः", featured: false, backgroundImage: "" },
+                { id: 29, title: "अन्विष्यन्तां पदानि", category: "सम्भाषणसन्देशः", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 30, title: "श्री-विष्णुसहस्रनाम", category: "Telegram", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 31, t6itle: "निकषोपलः", category: "Telegram", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 32, title: "कथाः - प्रश्नावली", category: "Telegram", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 33, title: "Simple संस्कृतम् transliterator", category: "TA", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 34, title: "संस्कृतम् Bingo", category: "TA", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 35, title: "संस्कृतम् analog clock", category: "TA", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 36, title: "श्रीमद्भगवद्गीता in a year!", category: "TA", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 37, title: "संस्कृतम् Rocks!", category: "TA", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 38, title: "T-rex in संस्कृतम्", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 39, title: "गणितपरीक्षा", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 40, title: "A Game", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 41, title: "गगननौका game", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 42, title: "सर्पलीला game", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 43, title: "Free Smash game", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 44, title: "श्लोकार्थ संग्रह", category: "TA", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 45, title: "Auto श्लोकपाठक:", category: "TA", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 46, title: "Wordle with numbers", category: "ET", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 47, title: "Verb Conjugations", category: "ET", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 48, title: "Noun declensions", category: "ET", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 49, title: "Maheshwarani sutrani", category: "ET", featured: false, backgroundImage: "covers/image11.jpg" },
+                { id: 50, title: "Namavali", category: "RG", featured: false, backgroundImage: "covers/image11.jpg" },
+
+
+            ];
+
+            const featuredContainer = document.getElementById('featured-section');
+            const gridContainer = document.getElementById('grid-section');
+
+            function createGameCard(game) {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.dataset.category = game.category;
+
+                // Set the background image for the game card
+                card.style.backgroundImage = `url(${game.backgroundImage})`;
+
+                // Add a darker overlay to ensure text is readable
+                card.style.backgroundSize = 'cover';
+                card.style.backgroundPosition = 'center';
+                card.style.position = 'relative'; // To position content inside
+
+                // Game title and category
+                const content = document.createElement('div');
+                content.className = 'game-card-content';
+                content.innerHTML = `<h3><a href="/games/game${game.id}/index.html">${game.title}</a></h3>`;
+                content.style.color = '#161A2B';
+                // Append the content inside the card
+                card.appendChild(content);
+
+                return card;
+            }
+
+
+            function populateGames() {
+                featuredContainer.innerHTML = '';
+                gridContainer.innerHTML = '';
+
+                let featuredGames = games.filter(game => game.featured);
+
+                // Clone the featured games twice to create an infinite loop effect
+                let allFeaturedGames = [...featuredGames, ...featuredGames];
+
+                allFeaturedGames.forEach(game => {
+                    const card = createGameCard(game);
+                    featuredContainer.appendChild(card);
+                });
+
+                games.forEach(game => {
+                    const card = createGameCard(game);
+                    gridContainer.appendChild(card);
+                });
+            }
+            function toggleMenu() {
+                document.getElementById("menu-links").classList.toggle("show");
+            }
+            populateGames();
+
+            // Filtering functionality
+            document.getElementById('filter-section').addEventListener('click', (e) => {
+                if (e.target.tagName !== 'BUTTON') return;
+                const filter = e.target.dataset.filter;
+                const cards = gridContainer.querySelectorAll('.game-card');
+                cards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter)
+                        card.style.display = 'block';
+                    else
+                        card.style.display = 'none';
+                });
+
+
+            });
+            let scrollSpeed = 1; // pixels per tick
+            setInterval(() => {
+                // If user scrolled to the end, reset scroll
+                if (featuredContainer.scrollLeft >= (featuredContainer.scrollWidth - featuredContainer.clientWidth)) {
+                    featuredContainer.scrollLeft = 0;
+                } else {
+                    featuredContainer.scrollLeft += scrollSpeed;
+                }
+            }, 20);
+        }
+    </script>
+</body>
+
+</html>

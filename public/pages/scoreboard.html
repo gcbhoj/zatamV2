@@ -1,0 +1,186 @@
+<div class="main-container">
+
+    <div class="scoreboard-container">
+        <h1>Scoreboard</h1>
+        <table id="scoreboard-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Game</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Scores will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<style>
+    /* 
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #161A2B, #F4F4F4);
+       
+        color: #fff;
+        padding: 20px;
+    } */
+
+    .main-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Scoreboard Container */
+    .scoreboard-container {
+        background: rgba(255, 255, 255, 0.1);
+        align-items: center;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 30px #161A2B;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 100%;
+        max-width: 800px;
+        margin-top: 100px;
+        margin-right: 20px;
+        margin-left: 20px;
+        min-height: 50vh;
+        text-align: center;
+    }
+
+    /* Heading */
+    .scoreboard-container h1 {
+        margin-bottom: 1.5rem;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #161A2B;
+        text-shadow:
+            0 0 2px #bec1d1,
+            0 0 5px #d1d4e1,
+            0 0 2px #161A2B;
+
+    }
+
+    /* Table Styling */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    th {
+        font-size: 1.2rem;
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #161A2B;
+        font-weight: bold;
+    }
+
+    td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #161A2B;
+    }
+
+    th {
+        background: rgba(255, 255, 255, 0.1);
+        font-weight: bold;
+    }
+
+    tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .scoreboard-container {
+            padding: 1.5rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        th,
+        td {
+            padding: 0.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        .scoreboard-container {
+            padding: 1.5rem;
+        }
+
+        .scoreboard-container h1 {
+            font-size: 2rem;
+        }
+
+        th {
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+
+
+        td {
+            font-size: 1rem;
+            padding: 0.5rem;
+        }
+    }
+</style>
+<script type="module">
+    import { db, getScoreboard } from './script/firebase.js';
+
+    // Function to display scores in the table
+    const displayScores = async (gameId) => {
+        const scoreboard = await getScoreboard(gameId);
+        const tableBody = document.querySelector("#scoreboard-table tbody");
+
+        // Clear existing rows
+        tableBody.innerHTML = "";
+
+        // Add new rows
+        scoreboard.forEach((score, index) => {
+            const row = document.createElement("tr");
+
+            const rankCell = document.createElement("td");
+            rankCell.textContent = index + 1;
+
+            const playerCell = document.createElement("td");
+            playerCell.textContent = score.userId; // Replace with user's displayName if available
+
+            const gameCell = document.createElement("td");
+            gameCell.textContent = score.gameId;
+
+            const scoreCell = document.createElement("td");
+            scoreCell.textContent = score.highestScore;
+
+            row.appendChild(rankCell);
+            row.appendChild(playerCell);
+            row.appendChild(gameCell);
+            row.appendChild(scoreCell);
+
+            tableBody.appendChild(row);
+        });
+    };
+
+    // Load scores for a specific game (e.g., "game1")
+    document.addEventListener("DOMContentLoaded", () => {
+        displayScores("game1"); // Replace "game1" with the actual game ID
+    });
+</script>

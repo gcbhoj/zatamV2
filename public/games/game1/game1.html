@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Yatra+One&display=swap"
+        rel="stylesheet">
+</head>
+
+
+<body>
+
+    <script>
+        let score = 0;
+        let score_el;
+
+
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// UTILITY FUNCTIONS //////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        function generate_random_rgb_color() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+        function generate_random_latin_char() {
+            return String.fromCharCode(((Math.random() < 0.5) ? 65 : 97) + Math.floor(Math.random() * 26));
+        }
+        function generate_random_devanagari_char() {
+            return String.fromCharCode(0x0900 + Math.floor(Math.random() * (0x097F - 0x0900)));
+        }
+        function generate_random_devanagari_char_no_diacritics() {
+            return String.fromCharCode(0x0905 + Math.floor(Math.random() * (0x0939 - 0x0905)));
+        }
+
+        function init_score() {
+            score_el = document.createElement("score");
+            score_el.innerHTML = `Score: ${score}`;
+            document.body.appendChild(score_el);
+        }
+        function update_score(points) {
+            score += points;
+            score_el.innerHTML = `Score: ${score}`;
+        }
+
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// GLOBAL STYLE ///////////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        let style = document.createElement("style");
+        document.body.appendChild(style);
+        function init_style() {
+            style.innerHTML += `
+    * { padding: 0; margin: 0; min-width: 0; user-select: none; line-height: 1; font-family: "Yatra One"; }
+    body { background-color: white; }
+      score { 
+            position: fixed; 
+            top: 5vh; 
+            right: 2vw; 
+            font-size: 2em; 
+            z-index: 99; 
+            color: white; 
+            background-color: #222; 
+            padding: 1vw; 
+            border-radius: 1em; 
+        }
+  `;
+        }
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// STATIC DATA ////////////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        const sentence_list = [
+            "The big red dog jumped over the lazy fox.",
+            "Another example sentence.",
+            "एतत् उदाहरणवाक्यम् अस्ति",
+            "अहिंसा परमो धर्मः।"
+        ];
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// DYNAMIC DATA ///////////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        const found_words = [];
+        const current_words = [];
+        const current_sentence = "";
+        const current_grid = [];
+        const grid_size = 8;
+        let occupied_indices = new Set();
+        let embedded_words = [];
+        const segmenter = new Intl.Segmenter("sa", { granularity: "word" });
+
+
+
+
+
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// TIMER UI ///////////////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        let timer_el = document.createElement("timer");
+        document.body.appendChild(timer_el);
+
+        function init_timer() {
+        }
+        function reset_timer() {
+            timer_el.innerHTML = ``;
+        }
+
+
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// SENTENCE UI ////////////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        let sentence_el = document.createElement("sentence");
+        document.body.appendChild(sentence_el);
+
+        function init_sentence() {
+            style.innerHTML += `
+    sentence { color: white; background-color: #222; padding: 2vw 0; position: fixed; width: 100vw; text-align: center; bottom: 0; font-size: 2em; left: 0; z-index: 99; display: inline-block; }
+  `;
+            sentence_el.innerHTML = `Please select a sentence!`;
+        }
+        function extract_words_from_sentence(index) {
+            const segments = segmenter.segment(sentence_list[index]);
+            const words = [];
+            for (const segment of segments) {
+                if (segment.segment != " " && segment.segment != ".") {
+                    words.push(segment.segment);
+                }
+            }
+            return words;
+        }
+        function switch_sentence(index) {
+            sentence_el.innerHTML = sentence_list[index];
+            randomize_grid();
+            embed_words_in_grid(extract_words_from_sentence(index));
+        }
+
+
+
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// SENTENCE SIDEBAR UI ////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        let sentence_sidebar_el = document.createElement("sentence-sidebar");
+        document.body.appendChild(sentence_sidebar_el);
+
+        function init_sentence_sidebar() {
+            style.innerHTML += `
+    sentence-sidebar { position: fixed; width: 20vw; top: 5vh; left: 2vw; font-size: 2em; z-index: 98; display: inline-block; padding: 2vw; color: white; background-color: #222; }
+    sentence-sidebar { text-align: left; border-radius: 1em; }
+    sentence-sidebar button { width: 3vw; height: 3vw; background-color: white; color: black;  display: inline-block; border: none; border-radius: 2em; margin: 0.5em; }
+  `;
+            sentence_sidebar_el.innerHTML = `श्लोक<br><br>`;
+            for (let i = 0; i < sentence_list.length; i++) {
+                sentence_sidebar_el.innerHTML += `<button onclick="switch_sentence(${i})">${i + 1}</button>`;
+            }
+        }
+
+
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        //// GRID UI ////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////
+        let grid_el = document.createElement("grid");
+        document.body.appendChild(grid_el);
+
+        function init_grid() {
+            style.innerHTML += `
+    grid, cell { text-align: center; align-content: center; display: inline-block; }
+    grid { height: 90vh; width: 100vw; }
+    cell { font-size: 2em; min-height: 2em; min-width: 2em; padding: 0.1em; border: 1px solid black; }
+    cell { background: linear-gradient(145deg, #FFFFFF, #FFFFFF}); }
+    cell { box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.1), inset -5px -5px 10px rgba(255, 255, 255, 0.2);}
+    cell:hover { background-color: grey; }
+    @keyframes pop {
+        0% { transform: rotate(0) scale(1); }
+       20% { transform: rotate(10deg) scale(1.2); }
+       40% { transform: rotate(-10deg) scale(0.9); }
+       80% { transform: rotate(0deg) scale(1); }
+      100% { transform: rotate(0); }
+    }
+  `;
+            for (let i = 0; i < grid_size; i++) {
+                for (let j = 0; j < grid_size; j++) {
+                    grid_el.innerHTML += `<cell> </cell>`;
+                }
+                grid_el.innerHTML += `<br>`;
+            }
+        }
+
+        function randomize_grid() {
+            grid_el.innerHTML = ``;
+            for (let i = 0; i < grid_size; i++) {
+                for (let j = 0; j < grid_size; j++) {
+                    grid_el.innerHTML += `<cell>${generate_random_devanagari_char_no_diacritics()}</cell>`;
+                }
+                grid_el.innerHTML += `<br>`;
+            }
+        }
+
+        function highlight_word(_indices, _word) {
+            const _highlight_color = generate_random_rgb_color();
+            _indices.forEach(index => {
+                grid_el.children[index].style.background = `linear-gradient(145deg, #FFFFFF80, ${_highlight_color})`;
+                grid_el.children[index].style.boxShadow = `inset 5px 5px 10px rgba(0, 0, 0, 0.3), inset -5px -5px 10px rgba(255, 255, 255, 0.9)`;
+                grid_el.children[index].style.border = "1px solid transparent";
+                grid_el.children[index].style.filter = "drop-shadow(0 0 0.75rem #00000050)";
+                grid_el.children[index].style.borderRadius = "0.2em";
+                grid_el.children[index].style.animation = "pop 5s infinite ease";
+            });
+            console.log(_word);
+            update_score(10);
+        }
+
+        function embed_vertical_word(_word) {
+            let _word_array = Array.from(_word);
+            let _offset;
+            let valid = false;
+            // Try random offsets until we find one that fits.
+            let _attempts = 0;
+            while (!valid && _attempts < 5) {
+                _offset = Math.floor(Math.random() * ((grid_size - _word_array.length) * (grid_size + 1) + grid_size));
+                valid = true;
+                for (let i = 0; i < _word_array.length; i++) {
+                    let index = (grid_size + 1) * i + _offset;
+                    if (occupied_indices.has(index)) {
+                        valid = false;
+                        break;
+                    }
+                }
+                _attempts++;
+            }
+            let indices = [];
+            // Place the word, mark indices as occupied, and attach click events.
+            if (valid) {
+                for (let i = 0; i < _word_array.length; i++) {
+                    let index = (grid_size + 1) * i + _offset;
+                    grid_el.children[index].innerText = _word_array[i];
+                    occupied_indices.add(index);
+                    indices.push(index);
+                    grid_el.children[index].addEventListener("click", () => highlight_word(indices, _word));
+                }
+            }
+            embedded_words.push(indices);
+        }
+
+        function embed_horizontal_word(_word) {
+            let _word_array = Array.from(_word);
+            let _offset, _row;
+            let valid = false;
+
+            let _attempts = 0;
+            while (!valid && _attempts < 5) {
+                _offset = Math.floor(Math.random() * ((grid_size - _word_array.length) + 1));
+                _row = Math.floor(Math.random() * grid_size);
+                valid = true;
+                for (let i = 0; i < _word_array.length; i++) {
+                    let index = i + _offset + (grid_size + 1) * _row;
+                    if (occupied_indices.has(index)) {
+                        valid = false;
+                        break;
+                    }
+                }
+                _attempts++;
+            }
+            let indices = [];
+            if (valid) {
+                for (let i = 0; i < _word_array.length; i++) {
+                    let index = i + _offset + (grid_size + 1) * _row;
+                    grid_el.children[index].innerText = _word_array[i];
+                    occupied_indices.add(index);
+                    indices.push(index);
+                    grid_el.children[index].addEventListener("click", () => highlight_word(indices, _word));
+                }
+            }
+            embedded_words.push(indices);
+        }
+
+        function embed_words_in_grid(_words_to_embed) {
+            occupied_indices.clear();
+            embedded_words = [];
+            for (let i = 0; i < _words_to_embed.length; i++) {
+                if (i % 2 == 0) {
+                    embed_vertical_word(_words_to_embed[i]);
+                }
+                else {
+                    embed_horizontal_word(_words_to_embed[i]);
+                }
+            }
+        }
+
+        function reset_grid() {
+            grid_el.innerHTML = ``;
+        }
+
+
+        function trigger_win_state() {
+        }
+        function trigger_fail_state() {
+        }
+
+
+        // MAIN
+        init_style();
+        init_grid();
+        init_sentence();
+        init_sentence_sidebar();
+        init_score();
+
+
+
+    </script>
+</body>
+
+</html>
